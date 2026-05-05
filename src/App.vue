@@ -9,8 +9,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.j
 const ocrResult = ref("");
 const isProcessing = ref(false);
 
-const handleFileUpload = async (event: any) => {
-  const file = event.target.files[0];
+const handleFileUpload = async (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
   if (!file) return;
 
   isProcessing.value = true;
@@ -38,7 +39,7 @@ const processPdf = async (file: File) => {
   canvas.width = viewport.width;
 
   if (context) {
-    await page.render({ canvasContext: context, viewport }).promise;
+    await page.render({ canvasContext: context, viewport, canvas }).promise;
     // แปลง Canvas เป็น Blob (รูปภาพ) เพื่อส่งให้ Tesseract
     canvas.toBlob((blob) => {
       if (blob) recognizeText(blob);
@@ -52,7 +53,7 @@ const recognizeText = async (data: File | Blob) => {
       data: { text },
     } = await Tesseract.recognize(data, "tha+eng");
     ocrResult.value = text;
-  } catch (error) {
+  } catch {
     ocrResult.value = "เกิดข้อผิดพลาดในการอ่านไฟล์";
   }
 };
