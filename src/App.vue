@@ -60,7 +60,7 @@ const recognizeText = async (data: File | Blob) => {
 
 <template>
   <div style="padding: 20px">
-    <h1>Vue OCR (Support PDF & Image) 📄📸</h1>
+    <h1>Vue OCR (Support Image) 📄📸</h1>
     <!-- เพิ่ม .pdf ใน accept -->
     <input type="file" @change="handleFileUpload" accept="image/*,application/pdf" />
 
